@@ -7,7 +7,6 @@ on:
 env:
   SERVICE: workspace-hub360
   SERVICE_BACKEND: workspace-hub360-api
-
   CLIENT_NAME: scs-demo
   REGION: us-central1
   KEYCLOAK_FILE: keycloak.demo.json
@@ -15,7 +14,7 @@ env:
 jobs:
   deploy_on_google_cloudrun:
     runs-on: ubuntu-latest
-    name: Deploy GCR - scs-demo
+    name: Teste
     steps:
       - name: 'Checkout da versão'
         uses: actions/checkout@v2
@@ -29,14 +28,12 @@ jobs:
         env:
           COLOR: "blue"
         run: |
-          URL_SERVICE=$(gcloud run services describe $SERVICE-$CLIENT_NAME --platform managed --region $REGION --format 'value(status.url)')
-          NEW_CONTENT="[![ ${{ env.CLIENT_NAME }} ](https://img.shields.io/badge/${{ env.CLIENT_NAME }}-${{ env.COLOR }})](${URL_SERVICE})"
+          NEW_CONTENT="[![ REPLACED ](https://img.shields.io/badge/teste-blue)](https://google.com)"
           # Read the README.md content
           README_CONTENT=$(<README.md)
-          CLIENT_NAME='{${{ env.CLIENT_NAME }}}'
 
           # Replace the markers with the new content
-          UPDATED_CONTENT="${README_CONTENT//$CLIENT_NAME/$NEW_CONTENT}"
+          UPDATED_CONTENT="${README_CONTENT//REPLACE/$NEW_CONTENT}"
 
           # Write the updated content back to README.md
           echo -e "$UPDATED_CONTENT" > README.md
@@ -45,7 +42,7 @@ jobs:
       - name: Commiting and Push
         run: |
           git add .
-          git commit -m "docs(readme): Bump ${{ env.CLIENT_NAME }} button"
+          git commit -m "docs(readme): Bump teste button"
           git branch github_actions_bot
           git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
           git push -u origin github_actions_bot
